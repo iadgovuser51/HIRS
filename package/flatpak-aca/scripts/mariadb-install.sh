@@ -9,16 +9,17 @@ mkdir /var/mariadb/data
 echo "Initializing database tables"
 cd /app/mariadb
 
-# # Sleep 5 seconds for database setup
-# echo "Sleeping for 5 seconds"
-# sleep 5
+# Start mariadb
+mysqld --no-defaults --console --basedir=/var/mariadb/ --datadir=/var/mariadb/data/ &
 
-# # kill mysqld for system tables creation
-# echo "Killing mariadb"
-# kill $(ps aux | grep '[m]ysqld' | awk '{print $2}')
+# Sleep 5 seconds for database setup
+echo "Sleeping for 5 seconds for db setup"
+sleep 4
 
-# # Create system tables
-# scripts/mysql_install_db --datadir=/var/mariadb/data &
+# kill mysqld for system tables creation
+echo "Killing mariadb"
+kill $(ps aux | grep '[m]ysqld' | awk '{print $2}')
 
-# Start mariadb again
-mysqld --no-defaults --console --skip-grant-tables  --basedir=/var/mariadb/ --datadir=/var/mariadb/data/ &
+# Create system tables
+echo "Creating system tables"
+scripts/mysql_install_db --datadir=/var/mariadb/data &

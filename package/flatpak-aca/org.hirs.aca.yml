@@ -93,23 +93,26 @@ modules:
       - --share=network
     build-commands:
       - mkdir /app/hirs
-      - ls -a
       - cp flatpak-hirs/./ -R  /app/hirs
-      - ls -a /app/hirs
-      - install -D hirs-aca-setup.sh /app/hirs/scripts/hirs-aca-setup.sh
       - chmod 755 ./aca-build.sh
       - ./aca-build.sh
-      - install -D -m 755 ./HIRS_AttestationCA/build/libs/HIRS_AttestationCA.war /app/hirs/wars
-      - install -D -m 755 ./HIRS_AttestationCAPortal/build/libs/HIRS_AttestationCAPortal.war /app/hirs/wars
+      - cp ./HIRS_AttestationCA/build/libs/HIRS_AttestationCA.war /app/hirs/wars/
+      - cp ./HIRS_AttestationCAPortal/build/libs/HIRS_AttestationCAPortal.war /app/hirs/wars/
     sources:
       - type: dir
         path: hirs
       - type: file
-        path: scripts/hirs-aca-setup.sh
-      - type: file
         path: scripts/aca-build.sh
       - type: git
         url: https://github.com/nsacyber/HIRS.git
+
+  - name: aca-setup
+    buildsystem: simple
+    build-commands:
+      - install -D hirs-aca-setup.sh /app/hirs/scripts/hirs-aca-setup.sh
+    sources:
+      - type: file
+        path: scripts/hirs-aca-setup.sh
 
 finish-args:
   - --share=network
