@@ -1,0 +1,91 @@
+app-id: org.hirs.aca
+runtime: org.freedesktop.Platform
+runtime-version: '21.08'
+sdk: org.freedesktop.Sdk
+sdk-extensions:
+  - org.freedesktop.Sdk.Extension.openjdk8
+command: /app/bin/hirs-aca-install.sh
+modules:
+  # Tomcat Dependencies
+  - name: openjdk
+    buildsystem: simple
+    build-commands: 
+      - /usr/lib/sdk/openjdk8/install.sh
+
+  - name: tomcat7
+    buildsystem: simple
+    build-commands:
+      - install -D hirs-aca-install.sh /app/bin/hirs-aca-install.sh
+      - install -D tomcat-install.sh /app/bin/tomcat-install.sh
+      - mkdir /app/tomcat
+      - cp . -R /app/tomcat
+    cleanup:
+      - /tomcat/hirs-aca-install.sh
+      - /tomcat/tomcat-install.sh
+    sources:
+      - type: file
+        path: scripts/tomcat-install.sh
+      - type: file
+        path: scripts/hirs-aca-install.sh
+      - type: archive
+        url: https://archive.apache.org/dist/tomcat/tomcat-7/v7.0.76/bin/apache-tomcat-7.0.76.tar.gz
+        sha256: 63ccbb0ad37077a01e1fcd2b7cfd48d94007759194dcbcd2fbe10dee85bc46be
+
+  # Dependencies for mariadb
+  - name: libaio
+    no-autogen: true
+    make-install-args:
+      - includedir=/app/include
+      - libdir=/app/lib
+    sources:
+      - type: git
+        url: https://pagure.io/libaio.git
+
+  - name: ncurses
+    no-autogen: true
+    config-opts:
+      - --prefix=${FLATPAK_DEST}
+      - --with-shared
+      - --with-termlib=tinfo
+      - --with-abi-version=5 
+    make-install-args:
+      - install.libs
+    cleanup:
+      - /bin
+      - /include
+      - /share/man
+      - "/lib/*.a"
+      - "/lib/*.la"
+    sources:
+      - type: archive
+        url: https://ftp.gnu.org/gnu/ncurses/ncurses-6.2.tar.gz
+        sha256: 30306e0c76e0f9f1f0de987cf1c82a5c21e1ce6568b9227f7da5b71cbea86c9d
+        x-checker-data:
+          type: anitya
+          project-id: 234776
+          stable-only: true
+          url-template: https://ftp.gnu.org/gnu/ncurses/ncurses-$version.tar.gz
+
+  - name: Mariadb-10.3
+    buildsystem: simple
+    build-commands:
+      - install -D mariadb-install.sh /app/bin/mariadb-install.sh
+      - mkdir /app/mariadb
+      - cp ./ -R /app/mariadb
+    cleanup:
+      - /mariadb/mariadb-install.sh
+    sources:
+      - type: file
+        path: scripts/mariadb-install.sh
+      - type: archive
+        path: dependencies/mariadb-10.3.34-linux-systemd-x86_64-minimal.tar.gz
+
+finish-args:
+  - --share=network
+  - --env=PATH=/app/jre/bin:/usr/bin:/app/lib:/app/mariadb/bin
+  - --env=JAVA_HOME=/app/jre
+  - --env=CATALINA_PID=/var/tomcat/temp/tomcat.pid
+  - --env=CATALINA_Home=/var/tomcat
+  - --env=CATALINA_BASE=/var/tomcat
+  - --env=’CATALINA_OPTS=-Xms512M -Xmx1024M -server -XX:+UseParallelGC’
+  - --env=’JAVA_OPTS.awt.headless=true -Djava.security.egd=file:/dev/v/urandom’
