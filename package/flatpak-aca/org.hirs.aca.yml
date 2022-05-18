@@ -4,9 +4,8 @@ runtime-version: '21.08'
 sdk: org.freedesktop.Sdk
 sdk-extensions:
   - org.freedesktop.Sdk.Extension.openjdk8
-command: /app/bin/hirs-aca-install.sh
+command: /app/hirs/scripts/hirs-aca-setup.sh
 modules:
-  # Tomcat Dependencies
   - name: openjdk
     buildsystem: simple
     build-commands: 
@@ -15,23 +14,18 @@ modules:
   - name: tomcat7
     buildsystem: simple
     build-commands:
-      - install -D hirs-aca-install.sh /app/bin/hirs-aca-install.sh
       - install -D tomcat-install.sh /app/bin/tomcat-install.sh
       - mkdir /app/tomcat
       - cp . -R /app/tomcat
     cleanup:
-      - /tomcat/hirs-aca-install.sh
       - /tomcat/tomcat-install.sh
     sources:
       - type: file
         path: scripts/tomcat-install.sh
-      - type: file
-        path: scripts/hirs-aca-install.sh
       - type: archive
         url: https://archive.apache.org/dist/tomcat/tomcat-7/v7.0.76/bin/apache-tomcat-7.0.76.tar.gz
         sha256: 63ccbb0ad37077a01e1fcd2b7cfd48d94007759194dcbcd2fbe10dee85bc46be
 
-  # Dependencies for mariadb
   - name: libaio
     no-autogen: true
     make-install-args:
@@ -80,9 +74,46 @@ modules:
       - type: archive
         path: dependencies/mariadb-10.3.34-linux-systemd-x86_64-minimal.tar.gz
 
+  - name: protobuf
+    buildsystem: simple
+    build-commands:
+      - cp . -R /app/lib
+    sources:
+      - type: archive
+        url: https://github.com/protocolbuffers/protobuf/releases/download/v3.4.0/protoc-3.4.0-linux-x86_64.zip
+        sha256: e4b51de1b75813e62d6ecdde582efa798586e09b5beaebfb866ae7c9eaadace4
+
+  - name: aca-build
+    buildsystem: simple
+    # Note: flatpak hub may not allow share network on
+    #       This is needed for gradle to be built.
+    #       A work around is to have pre-built wars
+    build-options:
+     build-args:
+      - --share=network
+    build-commands:
+      - mkdir /app/hirs
+      - ls -a
+      - cp flatpak-hirs/./ -R  /app/hirs
+      - ls -a /app/hirs
+      - install -D hirs-aca-setup.sh /app/hirs/scripts/hirs-aca-setup.sh
+      - chmod 755 ./aca-build.sh
+      - ./aca-build.sh
+      - install -D -m 755 ./HIRS_AttestationCA/build/libs/HIRS_AttestationCA.war /app/hirs/wars
+      - install -D -m 755 ./HIRS_AttestationCAPortal/build/libs/HIRS_AttestationCAPortal.war /app/hirs/wars
+    sources:
+      - type: dir
+        path: hirs
+      - type: file
+        path: scripts/hirs-aca-setup.sh
+      - type: file
+        path: scripts/aca-build.sh
+      - type: git
+        url: https://github.com/nsacyber/HIRS.git
+
 finish-args:
   - --share=network
-  - --env=PATH=/app/jre/bin:/usr/bin:/app/lib:/app/mariadb/bin
+  - --env=PATH=/app/jre/bin:/usr/bin:/app/lib:/app/bin:/app/mariadb/bin
   - --env=JAVA_HOME=/app/jre
   - --env=CATALINA_PID=/var/tomcat/temp/tomcat.pid
   - --env=CATALINA_Home=/var/tomcat

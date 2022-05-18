@@ -8,7 +8,6 @@
 	Runtime to choose is 20.08
 	flatpak install org.freedesktop.Sdk.Extension.openjdk8
 
-
 # Commands for installing building flatpak app
 	flatpak-builder --user --install --force-clean build-dir org.hirs.aca.yml
 
