@@ -12,7 +12,7 @@ modules:
     build-commands: 
       - /usr/lib/sdk/openjdk8/install.sh
 
-  # Mariadb dependency
+  # Mariadb Dependency
   - name: libaio
     no-autogen: true
     make-install-args:
@@ -22,7 +22,7 @@ modules:
       - type: git
         url: https://pagure.io/libaio.git
 
- # Mariadb dependency
+ # Mariadb Dependency
   - name: ncurses
     no-autogen: true
     config-opts:
@@ -47,7 +47,8 @@ modules:
           project-id: 234776
           stable-only: true
           url-template: https://ftp.gnu.org/gnu/ncurses/ncurses-$version.tar.gz
-
+          
+  # HIRS ACA Dependency
   - name: protobuf
     buildsystem: simple
     build-commands:

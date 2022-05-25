@@ -37,20 +37,3 @@
 				/config
 			/tomcat
 			/mariadb
-
-
-# Extra
-
-## Module for interactive scripting during build
-	- name: interactive-scripting
-	buildsystem: simple
-	build-options:
-	  build-args:
-	    - --share=network
-	build-commands:
-	  - install -D interactive-scripting.sh /app/bin/interactive-scripting.sh
-	  - /app/bin/interactive-scripting.sh
-	sources:
-	  - type: file
-	    path: scripts/interactive-scripting.sh
-
