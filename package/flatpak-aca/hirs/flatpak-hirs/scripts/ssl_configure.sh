@@ -71,7 +71,6 @@ if ! [ -f $CA_PEM ]; then
     chmod -R 777 ${HIRS_DIR}/certificates/*
     chmod 777 ${HIRS_DIR}/certificates/private
     chmod -R 777 ${HIRS_DIR}/certificates/private/*
-
 else
     # if the certificate was previously generated, grab the P12 password out of the file
     P12_PASSWORD=`cat $P12_DATA`
@@ -100,7 +99,6 @@ if [[ $1 = "server" ]]; then
         keytool -changealias -alias ${alias#*:} -destalias tomcat -v -keystore ${KEYSTORE_JKS} -storepass ${P12_PASSWORD}
         TOMCAT_CONNECTOR_STRING="<Connector port=\"8443\" protocol=\"HTTP\/1.1\" compression=\"on\" compressionMinSize=\"2048\" compressableMimeType=\"text\/html, text\/xml\" SSLEnabled=\"true\" maxThreads=\"150\" scheme=\"https\" secure=\"true\" clientAuth=\"want\" sslProtocol=\"TLS\" sslEnabledProtocols=\"TLSv1.2\" ciphers=\"TLS_ECDHE_ECDSA_WITH_AES_256_CBC_SHA384, TLS_ECDHE_ECDSA_WITH_AES_256_GCM_SHA384, TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384, TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA256, TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384\" keystoreFile=\"${CA_CERT_DIR_ESCAPED}\/keyStore.jks\" keystorePass=\"$P12_PASSWORD\" truststoreFile=\"${CA_CERT_DIR_ESCAPED}\/TrustStore.jks\" truststorePass=\"password\" \/>"
         sed -i "/<\/Service>/i \ ${TOMCAT_CONNECTOR_STRING}" $CATALINA_HOME/conf/server.xml
-        # sed -i "s/.*<\/Service>/<\/Service>/" $CATALINA_HOME/conf/server.xml
         sed -i 's/.*<\/tomcat-users>/<user username="tomcat" password="tomcat" roles="admin,admin-gui,manager,manager-gui"\/> <\/tomcat-users>/' $CATALINA_HOME/conf/tomcat-users.xml
 
         # ensure tomcat is using the trust store and key store for all other SSL operations.
@@ -109,14 +107,13 @@ if [[ $1 = "server" ]]; then
 JAVA_OPTS="-Djavax.sql.DataSource.Factory=org.apache.commons.dbcp.BasicDataSourceFactory -Xmx1536m -Djavax.net.ssl.keyStore=${KEYSTORE_JKS} -Djavax.net.ssl.keyStorePassword=${P12_PASSWORD} -Djavax.net.ssl.trustStore=${TRUSTSTORE_JKS} -Djavax.net.ssl.trustStorePassword=password"
 #end-hirs-conf
 EOF
-
-        # (3) set tomcat user as owner of tomcat installation
-        # This is needed for the webapp unloaded files for ACA
         chgrp -R $USER ${CATALINA_HOME}
         
     fi
 fi
 
+
+# TODO: uncomment and make my.cnf file once mariadb and tomcat version are specified. 
 #################
 # MariaDB
 #################

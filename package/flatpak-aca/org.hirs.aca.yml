@@ -117,21 +117,8 @@ modules:
       - type: file
         path: scripts/hirs-aca-setup.sh
 
-  # - name: interactive-scripting
-  #   buildsystem: simple
-  #   build-options:
-  #     build-args:
-  #       - --share=network
-  #   build-commands:
-  #     - install -D interactive-scripting.sh /app/bin/interactive-scripting.sh
-  #     - /app/bin/interactive-scripting.sh
-  #   sources:
-  #     - type: file
-  #       path: scripts/interactive-scripting.sh
-
 finish-args:
   - --share=network
-  # - --filesystem=host
   - --env=PATH=/app/jre/bin:/usr/bin:/app/lib:/app/bin:/var/tmp/mariadb/bin
   - --env=JAVA_HOME=/app/jre
   - --env=CATALINA_PID=/var/tmp/tomcat/temp/tomcat.pid
