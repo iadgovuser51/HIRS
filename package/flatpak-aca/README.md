@@ -28,12 +28,12 @@
 
 # Folder Structures for runtime
 	/var/tmp
-			/hirs
-				/aca
-					/certificates
-					/client-files
+		/hirs
+			/aca
 				/certificates
-				/scripts
-				/config
-			/tomcat
-			/mariadb
+				/client-files
+			/certificates
+			/scripts
+			/config
+		/tomcat
+		/mariadb
