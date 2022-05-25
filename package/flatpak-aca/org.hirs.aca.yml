@@ -4,28 +4,15 @@ runtime-version: '21.08'
 sdk: org.freedesktop.Sdk
 sdk-extensions:
   - org.freedesktop.Sdk.Extension.openjdk8
-command: /app/hirs/scripts/hirs-aca-setup.sh
+command: /app/bin/hirs-aca-setup.sh
 modules:
+  # Tomcat Dependency
   - name: openjdk
     buildsystem: simple
     build-commands: 
       - /usr/lib/sdk/openjdk8/install.sh
 
-  - name: tomcat7
-    buildsystem: simple
-    build-commands:
-      - install -D tomcat-install.sh /app/bin/tomcat-install.sh
-      - mkdir /app/tomcat
-      - cp . -R /app/tomcat
-    cleanup:
-      - /tomcat/tomcat-install.sh
-    sources:
-      - type: file
-        path: scripts/tomcat-install.sh
-      - type: archive
-        url: https://archive.apache.org/dist/tomcat/tomcat-7/v7.0.76/bin/apache-tomcat-7.0.76.tar.gz
-        sha256: 63ccbb0ad37077a01e1fcd2b7cfd48d94007759194dcbcd2fbe10dee85bc46be
-
+  # Mariadb dependency
   - name: libaio
     no-autogen: true
     make-install-args:
@@ -35,6 +22,7 @@ modules:
       - type: git
         url: https://pagure.io/libaio.git
 
+ # Mariadb dependency
   - name: ncurses
     no-autogen: true
     config-opts:
@@ -60,6 +48,30 @@ modules:
           stable-only: true
           url-template: https://ftp.gnu.org/gnu/ncurses/ncurses-$version.tar.gz
 
+  - name: protobuf
+    buildsystem: simple
+    build-commands:
+      - cp . -R /app/lib
+    sources:
+      - type: archive
+        url: https://github.com/protocolbuffers/protobuf/releases/download/v3.4.0/protoc-3.4.0-linux-x86_64.zip
+        sha256: e4b51de1b75813e62d6ecdde582efa798586e09b5beaebfb866ae7c9eaadace4
+
+  - name: tomcat7
+    buildsystem: simple
+    build-commands:
+      - install -D tomcat-install.sh /app/bin/tomcat-install.sh
+      - mkdir /app/tomcat
+      - cp . -R /app/tomcat
+    cleanup:
+      - /tomcat/tomcat-install.sh
+    sources:
+      - type: file
+        path: scripts/tomcat-install.sh
+      - type: archive
+        url: https://archive.apache.org/dist/tomcat/tomcat-7/v7.0.76/bin/apache-tomcat-7.0.76.tar.gz
+        sha256: 63ccbb0ad37077a01e1fcd2b7cfd48d94007759194dcbcd2fbe10dee85bc46be
+
   - name: Mariadb-10.3
     buildsystem: simple
     build-commands:
@@ -74,30 +86,21 @@ modules:
       - type: archive
         path: dependencies/mariadb-10.3.34-linux-systemd-x86_64-minimal.tar.gz
 
-  - name: protobuf
-    buildsystem: simple
-    build-commands:
-      - cp . -R /app/lib
-    sources:
-      - type: archive
-        url: https://github.com/protocolbuffers/protobuf/releases/download/v3.4.0/protoc-3.4.0-linux-x86_64.zip
-        sha256: e4b51de1b75813e62d6ecdde582efa798586e09b5beaebfb866ae7c9eaadace4
-
   - name: aca-build
     buildsystem: simple
-    # Note: flatpak hub may not allow share network on
+    # Note: flatpak hub may not allow share network on.
     #       This is needed for gradle to be built.
-    #       A work around is to have pre-built wars
+    #       A work around is to have pre-built wars copied in.
     build-options:
      build-args:
       - --share=network
     build-commands:
       - mkdir /app/hirs
-      - cp flatpak-hirs/./ -R  /app/hirs
+      - cp flatpak-hirs/. -R  /app/hirs
       - chmod 755 ./aca-build.sh
       - ./aca-build.sh
-      - cp ./HIRS_AttestationCA/build/libs/HIRS_AttestationCA.war /app/hirs/wars/
-      - cp ./HIRS_AttestationCAPortal/build/libs/HIRS_AttestationCAPortal.war /app/hirs/wars/
+      - cp ./HIRS_AttestationCA/build/libs/HIRS_AttestationCA.war /app/tomcat/webapps/
+      - cp ./HIRS_AttestationCAPortal/build/libs/HIRS_AttestationCAPortal.war /app/tomcat/webapps/
     sources:
       - type: dir
         path: hirs
@@ -109,17 +112,30 @@ modules:
   - name: aca-setup
     buildsystem: simple
     build-commands:
-      - install -D hirs-aca-setup.sh /app/hirs/scripts/hirs-aca-setup.sh
+      - install -D hirs-aca-setup.sh /app/bin/hirs-aca-setup.sh
     sources:
       - type: file
         path: scripts/hirs-aca-setup.sh
 
+  # - name: interactive-scripting
+  #   buildsystem: simple
+  #   build-options:
+  #     build-args:
+  #       - --share=network
+  #   build-commands:
+  #     - install -D interactive-scripting.sh /app/bin/interactive-scripting.sh
+  #     - /app/bin/interactive-scripting.sh
+  #   sources:
+  #     - type: file
+  #       path: scripts/interactive-scripting.sh
+
 finish-args:
   - --share=network
-  - --env=PATH=/app/jre/bin:/usr/bin:/app/lib:/app/bin:/app/mariadb/bin
+  # - --filesystem=host
+  - --env=PATH=/app/jre/bin:/usr/bin:/app/lib:/app/bin:/var/tmp/mariadb/bin
   - --env=JAVA_HOME=/app/jre
-  - --env=CATALINA_PID=/var/tomcat/temp/tomcat.pid
-  - --env=CATALINA_Home=/var/tomcat
-  - --env=CATALINA_BASE=/var/tomcat
+  - --env=CATALINA_PID=/var/tmp/tomcat/temp/tomcat.pid
+  - --env=CATALINA_Home=/var/tmp/tomcat
+  - --env=CATALINA_BASE=/var/tmp/tomcat
   - --env=’CATALINA_OPTS=-Xms512M -Xmx1024M -server -XX:+UseParallelGC’
   - --env=’JAVA_OPTS.awt.headless=true -Djava.security.egd=file:/dev/v/urandom’

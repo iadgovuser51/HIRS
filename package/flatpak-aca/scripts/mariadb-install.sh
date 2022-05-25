@@ -1,25 +1,36 @@
 #!/bin/bash
 
-# Create structure in /var
-echo "Creating mariadb layout in /var"
-mkdir /var/mariadb
-mkdir /var/mariadb/data
+MARIADB_DIR=/var/tmp/mariadb
 
-# Initialize data base
-echo "Initializing database tables"
-cd /app/mariadb
+# Check if a mariadb data does not exist
+if [ ! -d "${MARIADB_DIR}/data" ] 
+then
+	# Create mariadb folder structure in /var/tmp
+	echo "Creating mariadb layout in /var/tmp"
+	mkdir $MARIADB_DIR
+	mkdir $MARIADB_DIR/data
 
-# Start mariadb
-mysqld --no-defaults --console --basedir=/var/mariadb/ --datadir=/var/mariadb/data/ &
+	cp /app/mariadb/. -R $MARIADB_DIR/
+	chmod -R 755 $MARIADB_DIR
 
-# Sleep 5 seconds for database setup
-echo "Sleeping for 5 seconds for db setup"
-sleep 4
+	# Initialize data base
+	echo "Initializing database tables"
+	mysqld --no-defaults --console --basedir=$MARIADB_DIR --datadir=$MARIADB_DIR/data/ &
 
-# kill mysqld for system tables creation
-echo "Killing mariadb"
-kill $(ps aux | grep '[m]ysqld' | awk '{print $2}')
+	# Sleep 5 seconds for database setup
+	echo "Sleeping for 5 seconds for db setup"
+	sleep 5
 
-# Create system tables
-echo "Creating system tables"
-scripts/mysql_install_db --datadir=/var/mariadb/data &
+	# kill mysqld for system tables creation
+	echo "Killing mariadb"
+	kill $(ps aux | grep '[m]ysqld' | awk '{print $2}')
+	sleep 3
+
+	# Create system tables
+	echo "Creating system tables"
+	cd $MARIADB_DIR
+	scripts/mysql_install_db --datadir=$MARIADB_DIR/data
+	sleep 5
+
+fi
+

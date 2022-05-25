@@ -5,14 +5,14 @@
 	https://docs.flatpak.org/en/latest/getting-started.html
 
 # Extensions to install
-	Runtime to choose is 20.08
+	Runtime to choose is 21.08
+	flatpak install flathub org.freedesktop.Platform//21.08 org.freedesktop.Sdk//21.08
 	flatpak install org.freedesktop.Sdk.Extension.openjdk8
 
 # Commands for installing building flatpak app
 	flatpak-builder --user --install --force-clean build-dir org.hirs.aca.yml
 
 # Command for running flatpak app
-	
 	# Run in background
 	flatpak run org.hirs.aca
 
@@ -20,25 +20,37 @@
 	flatpak run --devel --command=/usr/bin/bash org.hirs.aca
 
 
-# Statistics
-	1st build of flatpak-aca folder ~ 580M
-	1st build took 9.49 minutes
-	Mariadb minimal custom shrunk from 926.2 MB to ~80mb
-
-	tomcat resides in /var due to read only on al other folders in root
-	mariadb and hirs are located in /apps
-
-# Folder structures
-	/app
-		/hirs
-			/certificates
-			/scripts
-			/config
-			/wars
+# Folder Structures for Build
 	/app
 		/mariadb
-
-	/var
 		/tomcat
+		/hirs
 
+# Folder Structures for runtime
+	/var/tmp
+			/hirs
+				/aca
+					/certificates
+					/client-files
+				/certificates
+				/scripts
+				/config
+			/tomcat
+			/mariadb
+
+
+# Extra
+
+## Module for interactive scripting during build
+	- name: interactive-scripting
+	buildsystem: simple
+	build-options:
+	  build-args:
+	    - --share=network
+	build-commands:
+	  - install -D interactive-scripting.sh /app/bin/interactive-scripting.sh
+	  - /app/bin/interactive-scripting.sh
+	sources:
+	  - type: file
+	    path: scripts/interactive-scripting.sh
 

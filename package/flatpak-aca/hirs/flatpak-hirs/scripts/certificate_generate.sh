@@ -1,14 +1,17 @@
 #!/usr/bin/env bash
 
 # hirs directory
-HIRS_DIR=/var/data/hirs
+HIRS_DIR=/var/tmp/hirs
 
 # variables for the CA certificates
 CA_PATH=${HIRS_DIR}/certificates
 CA_KEYSTORE=${CA_PATH}/TrustStore.jks
 
 # variables for the ACA certificates
-ACA_CERTS=${HIRS_DIR}/certificates
+
+mkdir ${HIRS_DIR}/aca
+mkdir ${HIRS_DIR}/aca/certificates
+ACA_CERTS=${HIRS_DIR}/aca/certificates
 ACA_KEY=${ACA_CERTS}/aca.key
 ACA_CRT=${ACA_CERTS}/aca.crt
 ACA_P12=${ACA_CERTS}/aca.p12
@@ -53,5 +56,5 @@ keytool -importkeystore -srckeystore ${ACA_P12} -destkeystore ${ACA_JKS} -srcsto
 sed -i "s/aca\.keyStore\.password\s*=/aca.keyStore.password=password/" ${HIRS_DIR}/config/aca.properties
 
 # copy the trust store to the ACA
-mkdir ${HIRS_DIR}/certificates/client-files/
-cp ${CA_KEYSTORE} ${HIRS_DIR}/certificates/client-files/
+mkdir ${HIRS_DIR}/aca/client-files/
+cp ${CA_KEYSTORE} ${HIRS_DIR}/aca/client-files/
