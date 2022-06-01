@@ -91,8 +91,7 @@ if [[ $1 = "server" ]]; then
     if [[ -z `grep -o "keystoreFile=\"${CA_CERT_DIR_ESCAPED}\/keyStore.jks\"" $CATALINA_HOME/conf/server.xml` ]]; then
         echo "Configuring Tomcat SSL"
 
-        # Ask if this is correct
-        chown -R $USER:$USER ${HIRS_DIR}/certificates/
+        chown -R $USER ${HIRS_DIR}/certificates/
 
         # create an alias in the keystore for $USER
         alias=$(keytool -list -v -keystore ${KEYSTORE_JKS} -storepass ${P12_PASSWORD} | grep -B2 'PrivateKeyEntry' | grep 'Alias name:')
