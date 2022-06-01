@@ -1,0 +1,11 @@
+name: Flatpak ACA Build and Test
+on:
+  push:
+jobs:
+  Build-ACA:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+    - name: Build ACA flatpak
+      run: |
+        flatpak
