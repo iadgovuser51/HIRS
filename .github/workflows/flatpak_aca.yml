@@ -16,7 +16,7 @@ jobs:
 
         sudo flatpak remote-add --if-not-exists flathub https://flathub.org/repo/flathub.flatpakrepo
         sudo flatpak install -y flathub org.freedesktop.Platform//21.08 org.freedesktop.Sdk//21.08
-        sudo flatpak install -y flathub org.freedesktop.Sdk.Extension.openjdk8
+        sudo flatpak install -y flathub org.freedesktop.Sdk.Extension.openjdk8//21.08
 
         cd package/flatpak-aca
         sudo flatpak-builder --user --install --force-clean build-dir org.hirs.aca.yml
