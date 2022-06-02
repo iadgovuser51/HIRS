@@ -13,13 +13,11 @@ jobs:
         sudo apt install -y flatpak
         sudo apt install -y gnome-software-plugin-flatpak
         sudo apt install -y flatpak-builder
+        
         sudo flatpak remote-add --if-not-exists flathub https://flathub.org/repo/flathub.flatpakrepo
+        sudo flatpak install flathub org.freedesktop.Platform//21.08 org.freedesktop.Sdk//21.08
+        sudo flatpak install flathub org.freedesktop.Sdk.Extension.openjdk8
 
         cd package/flatpak-aca
-
         sudo flatpak-builder --user --install --force-clean build-dir org.hirs.aca.yml
-
-        sudo flatpak install flathub org.freedesktop.Platform//21.08 org.freedesktop.Sdk//21.08
-        sudo flatpak install org.freedesktop.Sdk.Extension.openjdk8
-
         sudo flatpak run org.hirs.aca
