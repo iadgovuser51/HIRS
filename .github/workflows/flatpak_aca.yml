@@ -26,7 +26,7 @@ jobs:
         mkdir repo
         sudo flatpak-builder --repo=./repo --user --install --force-clean build-dir org.hirs.aca.yml
         sudo flatpak remote-add --user  hirs ./repo --no-gpg-verify
-        # sudo flatpak install -y --user  hirs org.hirs.aca
+        sudo flatpak install -y --user  hirs org.hirs.aca
         
-        flatpak run org.hirs.aca
-        sh scripts/aca-wait.sh
+        # flatpak run org.hirs.aca
+        # sh scripts/aca-wait.sh
