@@ -25,5 +25,5 @@ jobs:
 
     - uses: actions/upload-artifact@v3
       with:
-        name: hirs.aca.glatpak
+        name: hirs.aca.flatpak
         path: package/flatpak-aca/hirs.aca.flatpak
