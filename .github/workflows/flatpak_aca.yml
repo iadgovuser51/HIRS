@@ -20,4 +20,5 @@ jobs:
 
         cd package/flatpak-aca
         sudo flatpak-builder --user --install --force-clean build-dir org.hirs.aca.yml
-        sudo flatpak run org.hirs.aca
+        flatpak run org.hirs.aca
+        
