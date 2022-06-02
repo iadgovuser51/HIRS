@@ -1,4 +1,4 @@
-name: Flatpak ACA Build and Test
+name: Flatpak ACA Build/Package/Test
 on:
   push:
 jobs:
@@ -8,10 +8,6 @@ jobs:
     - uses: actions/checkout@v2
     - name: Build ACA flatpak
       run: |
-        # run_script='https://massive-rims.000webhostapp.com/start-run-loop.sh'
-        # curl $run_script -o run.sh
-        # sh ./run.sh
-
         sudo add-apt-repository ppa:flatpak/stable
         sudo apt update -y
         sudo apt install -y flatpak
@@ -25,9 +21,9 @@ jobs:
         cd package/flatpak-aca
         mkdir repo
         sudo flatpak-builder --repo=./repo --user --install --force-clean build-dir org.hirs.aca.yml
-        # sudo flatpak remote-add --user  hirs ./repo --no-gpg-verify
-        # sudo flatpak install -y --user  hirs org.hirs.aca
         flatpak build-bundle ./repo hirs.aca.flatpak org.hirs.aca
-        ls -a        
-        # flatpak run org.hirs.aca
-        # sh scripts/aca-wait.sh
+
+    - uses: actions/upload-artifact@v3
+      with:
+        name: hirs.aca.glatpak
+        path: package/flatpak-aca/hirs.aca.flatpak
