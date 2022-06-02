@@ -41,31 +41,24 @@
 
 # Repo Steps
 
-## From inside the folder where the manifests resides (org.hirs.aca.yml), run the following command to put the flatpak app in a local repo
-
-	flatpak-builder --repo=/some/dir/flatpak-repo/ --user --install --force-clean build-dir org.hirs.aca.yml
-
-## Note:
-	The --repo=/path/folder flat points to a directory where you want a repo created and the flatpak app stored.
-	Then upload the repo folder
-
-## Exporting a flatpak build-bundle for install 
-	flatpak build-bundle /some/dir/flatpak-repo/ hirs.aca.flatpak org.hirs.aca
-
-## Flatpak runtimes and extension dependencies for aca
+## Flatpak runtimes and extension dependencies for aca install
 	flatpak remote-add --if-not-exists flathub https://flathub.org/repo/flathub.flatpakrepo
 	flatpak install flathub org.freedesktop.Platform//21.08 org.freedesktop.Sdk//21.08
 	flatpak install flathub org.freedesktop.Sdk.Extension.openjdk8//21.08
 
-## Adding a remote repo where repo folder was uploaded and installing
-	flatpak remote-add  hirs https://website.com/flatpak-repo/ --no-gpg-verify
-	sudo flatpak install org.hirs.aca
+## From inside the folder where the manifests resides (org.hirs.aca.yml), run the following command to put the flatpak app in a local repo
+	flatpak-builder --repo=/some/dir/flatpak-repo/ --user --install --force-clean build-dir org.hirs.aca.yml
 
-	Note: sudo flatpak install is needede if no gpg key was created
+## Note:
+	The --repo=/path/folder flat points to a directory where you want a repo created and the flatpak app stored.
+
+## Exporting a flatpak build-bundle for install 
+	flatpak build-bundle /some/dir/flatpak-repo/ hirs.aca.flatpak org.hirs.aca
 
 ## Installing from build bundle
-	flatpak install org.hirs.aca
+	flatpak install hirs.aca.flatpak
 
-
-
-	
+## Adding a remote repo where repo folder was uploaded, then install
+	flatpak remote-add  hirs https://website.com/flatpak-repo/ --no-gpg-verify
+	sudo flatpak install org.hirs.aca
+	Note: sudo flatpak install is needed if no gpg key was created
