@@ -4,10 +4,10 @@
 # Quick Tutorial
 	https://docs.flatpak.org/en/latest/getting-started.html
 
-# Extensions to install for building
-	Runtime to choose is 21.08
+# Runtimes/Extensions to install for building
+	flatpak remote-add --if-not-exists flathub https://flathub.org/repo/flathub.flatpakrepo
 	flatpak install flathub org.freedesktop.Platform//21.08 org.freedesktop.Sdk//21.08
-	flatpak install org.freedesktop.Sdk.Extension.openjdk8
+	flatpak install org.freedesktop.Sdk.Extension.openjdk8//21.08
 
 # Commands for installing/building flatpak app
 	flatpak-builder --user --install --force-clean build-dir org.hirs.aca.yml

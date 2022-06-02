@@ -8,4 +8,18 @@ jobs:
     - uses: actions/checkout@v2
     - name: Build ACA flatpak
       run: |
-        flatpak
+        add-apt-repository ppa:flatpak/stable
+        apt update -y
+        apt-update -y install flatpak
+        apt install -y gnome-software-plugin-flatpak
+        flatpak remote-add --if-not-exists flathub https://flathub.org/repo/flathub.flatpakrepo
+
+        cd package/flatpak-aca
+
+        flatpak-builder --user --install --force-clean build-dir org.hirs.aca.yml
+
+        flatpak install flathub org.freedesktop.Platform//21.08 org.freedesktop.Sdk//21.08
+        flatpak install org.freedesktop.Sdk.Extension.openjdk8
+
+        flatpak run org.hirs.aca
+        
