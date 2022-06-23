@@ -1,6 +1,6 @@
 
 allprojects {
-    task addPlugins << {
+    task addPlugins doLast {
         delete './build/plugins'
         mkdir './build/plugins'
         if (project.hasProperty('pluginDir')) {

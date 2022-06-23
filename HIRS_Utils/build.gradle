@@ -90,7 +90,7 @@ task importBaseline(type:JavaExec) {
 }
 
 task integrationTest(type: Test) {
-    testClassesDir = sourceSets.integrationTest.output.classesDir
+    testClassesDirs = sourceSets.integrationTest.output.classesDirs
     classpath = sourceSets.integrationTest.runtimeClasspath
 }
 
@@ -122,7 +122,7 @@ jacocoTestReport {
         xml.enabled true
         csv.enabled true
         html.enabled true
-        html.destination "${buildDir}/reports/jacoco/html"
+        html.destination(file("${buildDir}/reports/jacoco/html"))
     }
 }
 
