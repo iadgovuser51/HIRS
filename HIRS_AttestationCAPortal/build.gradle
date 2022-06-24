@@ -92,3 +92,11 @@ findbugs {
     effort = 'max'
     excludeFilter = new File(findbugsConfigDir, 'suppressions.xml')
 }
+
+pmd {
+    ignoreFailures = true
+    sourceSets = [sourceSets.main]
+    reportsDir = file("$project.buildDir/reports/pmd")
+    ruleSetFiles = files("config/pmd/ruleset.xml")
+    ruleSets = []
+}

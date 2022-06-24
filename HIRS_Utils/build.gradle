@@ -113,8 +113,16 @@ findbugs {
     excludeFilter = new File(findbugsConfigDir, 'suppressions.xml')
 }
 
-pmdMain {
-    exclude '**/xjc/**'
+// pmdMain {
+//     exclude '**/xjc/**'
+// }
+
+pmd {
+    ignoreFailures = true
+    sourceSets = [sourceSets.main]
+    reportsDir = file("$project.buildDir/reports/pmd")
+    ruleSetFiles = files("config/pmd/ruleset.xml")
+    ruleSets = []
 }
 
 jacocoTestReport {
@@ -138,4 +146,3 @@ publishing {
         }
     }
 }
-
