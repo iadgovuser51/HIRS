@@ -1,6 +1,8 @@
 package hirs.alert;
 
+// TODO: migrate annotations from findbugs to spotbugs
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
+
 import hirs.data.persist.Alert;
 import hirs.data.persist.ReportSummary;
 import hirs.persist.AlertManager;

@@ -192,6 +192,9 @@ Serilog.Sinks.Console, and Serilog.Sinks.File.
 
    END OF TERMS AND CONDITIONS
 
+# TODO: Update FindBugs Reference with appropriate license.
+
+
 The following dependencies are licensed under LGPL V2.1: FindBugs, Hibernate,
 and mariadb.
 

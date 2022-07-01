@@ -1,4 +1,4 @@
-<FindBugsFilter>
+<SpotBugsFilter>
      <Match>
        <Class name="hirs.AuthData$eAuthMode" />
      </Match>
@@ -35,4 +35,4 @@
     <Match>
         <Package name="~hirs\.utils\.xjc.*" />
     </Match>
-</FindBugsFilter>
+</SpotBugsFilter>

@@ -52,7 +52,8 @@ public class RimDatabasePageController
     private final ReferenceEventManager referenceEventManager;
     private static final Logger LOGGER
             = LogManager.getLogger(RimDatabasePageController.class);
-
+            
+    // TODO: Update for findbugs migration to spotbugs
     /**
      * This class was created for the purposes of avoiding findbugs message: As
      * the JavaDoc states, DateFormats are inherently unsafe for multi-threaded

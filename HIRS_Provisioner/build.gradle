@@ -1,4 +1,5 @@
-apply plugin: 'findbugs'
+// apply plugin: 'findbugs'
+apply plugin: 'spotbugs'
 apply plugin: 'checkstyle'
 apply plugin: 'application'
 
@@ -15,14 +16,16 @@ dependencies {
     compile libs.commons_lang
 
     compileOnly libs.checkstyle
-    compileOnly libs.findbugs
+    // compileOnly libs.findbugs
+    compileOnly libs.spotbugs
 
     testCompile libs.testng
     testCompile libs.mockito
     testCompile libs.powermock
     testCompile libs.spring_test
     testCompile libs.checkstyle
-    testCompile libs.findbugs
+    // testCompile libs.findbugs
+    testCompile libs.spotbugs
     testCompile libs.commons_lang
 }
 
@@ -39,10 +42,11 @@ checkstyle {
     showViolations = true
 }
 
-ext.findbugsConfigDir = "$configDir/findbugs"
+// ext.findbugsConfigDir = "$configDir/findbugs"
+ext.spotbugsConfigDir = "$configDir/spotbugs"
 
-findbugs {
-    toolVersion = '3.0.0'
+spotugs {
+    toolVersion = '3.1.0'
     ignoreFailures = false
     effort = 'max'
 }

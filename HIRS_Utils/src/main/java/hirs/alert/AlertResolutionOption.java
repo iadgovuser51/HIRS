@@ -1,6 +1,8 @@
 package hirs.alert;
 
 import com.fasterxml.jackson.annotation.JsonAutoDetect;
+
+// TODO: migrate annotations from findbugs to spotbugs
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 
 import java.util.List;

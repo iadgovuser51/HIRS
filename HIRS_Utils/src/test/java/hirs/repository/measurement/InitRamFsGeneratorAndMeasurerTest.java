@@ -2,7 +2,9 @@ package hirs.repository.measurement;
 
 import com.google.common.collect.Multimap;
 
+// TODO: migrate annotations from findbugs to spotbugs
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
+
 import hirs.data.persist.Digest;
 import hirs.data.persist.enums.DigestAlgorithm;
 

@@ -1,5 +1,6 @@
 apply plugin: 'checkstyle'
-apply plugin: 'findbugs'
+// apply plugin: 'findbugs'
+apply plugin: 'spotbugs'
 apply plugin: 'java'
 apply plugin: 'jacoco'
 apply plugin: 'pmd'
@@ -38,7 +39,7 @@ dependencies {
     compile 'org.hibernate:hibernate-validator:5.3.4.Final'
 
     compileOnly libs.checkstyle
-    compileOnly libs.findbugs
+    compileOnly libs.spotbugs
 
     runtime fileTree(dir: 'build/plugins', include: ['*.jar'])
 
@@ -84,13 +85,13 @@ checkstyle {
     showViolations = true
 }
 
-ext.findbugsConfigDir = "$configDir/findbugs"
+ext.spotbugsConfigDir = "$configDir/spotbugs"
 
-findbugs {
+spotbugs {
     toolVersion = '3.0.0'
     ignoreFailures = false
     effort = 'max'
-    excludeFilter = new File(findbugsConfigDir, 'suppressions.xml')
+    excludeFilter = new File(spotbugsConfigDir, 'suppressions.xml')
 }
 
 pmd {

@@ -1,6 +1,7 @@
 apply plugin: 'checkstyle'
 apply plugin: 'eclipse'
-apply plugin: 'findbugs'
+// apply plugin: 'findbugs'
+apply plugin: 'spotbugs'
 apply plugin: 'java'
 apply plugin: 'jacoco'
 apply plugin: 'pmd'
@@ -57,7 +58,8 @@ dependencies {
     }
 
     compileOnly libs.checkstyle
-    compileOnly libs.findbugs
+    // compileOnly libs.findbugs
+    compileOnly libs.spotbugs
 
     runtime fileTree(dir: 'build/plugins', include: ['*.jar'])
 
@@ -68,7 +70,8 @@ dependencies {
     testCompile libs.powermock
     testCompile libs.testng
     testCompile libs.checkstyle
-    testCompile libs.findbugs
+    // testCompile libs.findbugs
+    testCompile libs.spotbugs
     testCompile libs.commons_lang
 }
 
@@ -104,13 +107,14 @@ checkstyle {
     showViolations = true
 }
 
-ext.findbugsConfigDir = "$configDir/findbugs"
+// ext.findbugsConfigDir = "$configDir/findbugs"
+ext.spotbugsConfigDir = "$configDir/spotbugs"
 
-findbugs {
-    toolVersion = '3.0.0'
+spotbugs {
+    toolVersion = '3.1.0'
     ignoreFailures = false
     effort = 'max'
-    excludeFilter = new File(findbugsConfigDir, 'suppressions.xml')
+    excludeFilter = new File(spotbugsConfigDir, 'suppressions.xml')
 }
 
 // pmdMain {

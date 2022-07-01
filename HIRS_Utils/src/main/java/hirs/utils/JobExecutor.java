@@ -1,5 +1,6 @@
 package hirs.utils;
 
+// TODO: migrate annotations from findbugs to spotbugs
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 
 import java.util.ArrayList;

@@ -1,6 +1,8 @@
 package hirs.persist;
 
+// TODO: migrate annotations from findbugs to spotbugs
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
+
 import hirs.data.persist.baseline.IMABaselineRecord;
 import hirs.data.persist.SpringPersistenceTest;
 import hirs.repository.RPMRepoPackage;

@@ -1,6 +1,8 @@
 package hirs.utils.exec;
 
+// TODO: migrate annotations from findbugs to spotbugs
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
+
 import org.testng.Assert;
 import org.testng.annotations.Test;
 
